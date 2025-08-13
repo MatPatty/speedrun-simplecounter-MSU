@@ -25,6 +25,7 @@
 #![cfg_attr(not(feature = "export-abi"), no_main)]
 extern crate alloc;
 
+use stylus_cache_sdk::{is_contract_cacheable};
 /// Import items from the SDK. The prelude contains common traits and macros.
 use stylus_sdk::{alloy_primitives::U256, prelude::*};
 
@@ -40,13 +41,18 @@ sol_storage! {
 /// Declare that `Counter` is a contract with the following external methods.
 #[public]
 impl Counter {
+
+    pub fn is_cacheable(&self) -> bool {
+        is_contract_cacheable()
+    }
+
     /// Gets the number from storage.
     pub fn number(&self) -> U256 {
         self.number.get()
     }
 
     /// Sets a number in storage to a user-specified value.
-    pub fn set_number(&mut self, new_number: U256) {
+    pub fn set_number_matpatty(&mut self, new_number: U256) {
         self.number.set(new_number);
     }
 
@@ -63,6 +69,6 @@ impl Counter {
     /// Increments `number` and updates its value in storage.
     pub fn increment(&mut self) {
         let number = self.number.get();
-        self.set_number(number + U256::from(1));
+        self.set_number_matpatty(number + U256::from(1));
     }
 }
